@@ -27,6 +27,10 @@ class EnvironmentVariables {
 
   @IsNumber()
   PORT: number;
+
+  @IsString()
+  @IsNotEmpty()
+  PEPPER: string;
 }
 
 export function validate(config: Record<string, unknown>) {
