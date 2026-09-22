@@ -7,7 +7,10 @@ import { validate } from '@/config/env.validation';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true, validate }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      validate,
+    }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (config: ConfigService) => ({
@@ -26,4 +29,4 @@ import { validate } from '@/config/env.validation';
     UsersModule,
   ],
 })
-export class AppModule {}
+export class AppModule { }
