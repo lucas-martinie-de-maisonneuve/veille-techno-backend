@@ -1,56 +1,74 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+    ConflictException,
+    ForbiddenException,
+    Injectable,
+    NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from './entities/user.entity';
+import { ConfigService } from '@nestjs/config';
+import { User, UserRole } from './entities/user.entity';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { hashPassword } from '@/common/utils/password.util';
+import { ErrorMessages } from '@/common/constants/error-messages';
 
-/**
- * Service responsible for managing user-related operations,
- * including creating users and retrieving users by email or ID.
- */
 @Injectable()
 export class UsersService {
     constructor(
         @InjectRepository(User)
         private readonly userRepository: Repository<User>,
+        private readonly configService: ConfigService,
     ) { }
 
-    /**
-     * Creates a new user in the database after checking for existing users with the same email or username.
-     * If a user with the same email or username already exists, a ConflictException is thrown.
-     * @param data
-     * @returns
-     */
-    async create(data: Partial<User>): Promise<User> {
+    async create(data: CreateUserDto): Promise<User> {
         const existing = await this.userRepository.findOne({
-            where: [
-                { email: data.email },
-                { username: data.username }
-            ],
+            where: [{ email: data.email }, { username: data.username }],
         });
-
         if (existing) {
-            throw new ConflictException('Email or username already in use');
+            throw new ConflictException(ErrorMessages.auth.EMAIL_OR_USERNAME_TAKEN);
         }
-
         const user = this.userRepository.create(data);
         return this.userRepository.save(user);
     }
 
-    /**
-     * Finds a user by their email address.
-     * @param email The email address of the user to find.
-     * @returns A Promise that resolves to the User entity if found, or null if not found.
-     */
     async findByEmail(email: string): Promise<User | null> {
-        return this.userRepository.findOne({ where: { email } });
+        return this.userRepository
+            .createQueryBuilder('user')
+            .addSelect('user.password')
+            .where('user.email = :email', { email })
+            .getOne();
     }
 
-    /**
-     * Finds a user by their unique identifier (ID).
-     * @param id The unique identifier of the user to find.
-     * @returns A Promise that resolves to the User entity if found, or null if not found.
-     */
     async findById(id: string): Promise<User | null> {
         return this.userRepository.findOne({ where: { id } });
+    }
+
+    async update(
+        id: string,
+        dto: UpdateUserDto,
+        requestingUser: { id: string; role: UserRole },
+    ): Promise<User> {
+        const user = await this.findById(id);
+
+        if (!user) {
+            throw new NotFoundException(ErrorMessages.users.NOT_FOUND);
+        }
+
+        if (requestingUser.role !== UserRole.ADMIN && requestingUser.id !== id) {
+            throw new ForbiddenException(ErrorMessages.users.FORBIDDEN_PROFILE);
+        }
+
+        if (dto.role && requestingUser.role !== UserRole.ADMIN) {
+            throw new ForbiddenException(ErrorMessages.users.FORBIDDEN_ROLE);
+        }
+
+        if (dto.password) {
+            const pepper = this.configService.get<string>('PEPPER');
+            dto.password = await hashPassword(dto.password, this.configService);
+        }
+
+        Object.assign(user, dto);
+        return this.userRepository.save(user);
     }
 }

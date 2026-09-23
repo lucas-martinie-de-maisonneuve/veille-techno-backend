@@ -1,11 +1,12 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import * as bcrypt from 'bcrypt';
-import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { UsersService } from '@/users/users.service';
+import { CreateUserDto } from '@/users/dto/create-user.dto';
 import { User } from '@/users/entities/user.entity';
+import { hashPassword, comparePassword } from '@/common/utils/password.util';
+import { ErrorMessages } from '@/common/constants/error-messages';
 
 /**
  * AuthService is responsible for handling authentication-related operations,
@@ -24,30 +25,21 @@ export class AuthService {
      * @param dto The data transfer object containing user registration details.
      * @returns A Promise that resolves to the newly created user object without the password field.
      */
-    async register(dto: RegisterDto): Promise<Omit<User, 'password'>> {
-        const pepper = this.configService.get<string>('PEPPER');
-        const hashedPassword = await bcrypt.hash(dto.password + pepper, 10);
+    async register(dto: CreateUserDto): Promise<User> {
+        const hashedPassword = await hashPassword(dto.password, this.configService);
 
-        const user = await this.usersService.create({
+        return this.usersService.create({
             username: dto.username,
             email: dto.email,
             password: hashedPassword,
         });
-
-        const { password, ...result } = user;
-        return result;
     }
 
     async login(dto: LoginDto): Promise<{ accesstoken: string }> {
-        const pepper = this.configService.get<string>('PEPPER');
         const user = await this.usersService.findByEmail(dto.email);
 
-        if (user) {
-            const isMatch = await bcrypt.compare(dto.password + pepper, user.password);
-        }
-
-        if (!user || !(await bcrypt.compare(dto.password + pepper, user.password))) {
-            throw new UnauthorizedException('Invalid credentials');
+        if (!user || !(await comparePassword(dto.password, user.password, this.configService))) {
+            throw new UnauthorizedException(ErrorMessages.auth.INVALID_CREDENTIALS);
         }
 
         const payload = { sub: user.id, email: user.email, role: user.role };
