@@ -5,7 +5,7 @@ import * as bcrypt from 'bcrypt';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { UsersService } from '@/users/users.service';
-import { User } from '@/users/user.entity';
+import { User } from '@/users/entities/user.entity';
 
 /**
  * AuthService is responsible for handling authentication-related operations,

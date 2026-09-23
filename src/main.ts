@@ -15,11 +15,12 @@ async function bootstrap() {
     .setTitle("Lucas's API Documentation")
     .setDescription('The kanban API description')
     .setVersion('1.0')
+    .addServer('http://localhost:3001/api')
     .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api/docs', app, document);
+  SwaggerModule.setup('api', app, document);
 
   app.setGlobalPrefix('api');
 

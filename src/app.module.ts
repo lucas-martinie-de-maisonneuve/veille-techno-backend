@@ -4,7 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from '@/auth/auth.module';
 import { UsersModule } from '@/users/users.module';
 import { validate } from '@/config/env.validation';
-import { User } from './users/user.entity';
+import { User } from './users/entities/user.entity';
 
 @Module({
   imports: [
