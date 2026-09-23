@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from '@/auth/auth.module';
 import { UsersModule } from '@/users/users.module';
 import { validate } from '@/config/env.validation';
+import { User } from './users/entities/user.entity';
 
 @Module({
   imports: [
@@ -20,7 +21,9 @@ import { validate } from '@/config/env.validation';
         username: config.get<string>('DB_USERNAME'),
         password: config.get<string>('DB_PASSWORD'),
         database: config.get<string>('DB_NAME'),
-        entities: [__dirname + '/**/*.entity{.ts,.js}'],
+        entities: [
+          User,
+        ],
         synchronize: true,
       }),
       inject: [ConfigService],
