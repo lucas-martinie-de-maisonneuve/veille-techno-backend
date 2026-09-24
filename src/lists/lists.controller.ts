@@ -1,4 +1,15 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Request } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Patch,
+  Post,
+  Request,
+} from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
@@ -25,7 +36,7 @@ type AuthRequest = ExpressRequest & { user: { id: string; role: UserRole } };
 @ApiUnauthorizedResponse({ description: 'Unauthorized' })
 @Controller('lists')
 export class ListsController {
-  constructor(private readonly listsService: ListsService) { }
+  constructor(private readonly listsService: ListsService) {}
 
   @Post()
   @ApiOperation({ summary: 'Create a new list' })
