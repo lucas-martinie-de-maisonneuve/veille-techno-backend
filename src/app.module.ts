@@ -7,6 +7,9 @@ import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard';
 import { UsersModule } from '@/users/users.module';
 import { validate } from '@/config/env.validation';
 import { User } from '@/users/entities/user.entity';
+import { AdminSeed } from '@/common/seeds/admin.seed';
+import { ListsModule } from './lists/lists.module';
+import { List } from './lists/entities/list.entity';
 
 @Module({
   imports: [
@@ -25,6 +28,7 @@ import { User } from '@/users/entities/user.entity';
         database: config.get<string>('DB_NAME'),
         entities: [
           User,
+          List,
         ],
         synchronize: true,
       }),
@@ -32,12 +36,14 @@ import { User } from '@/users/entities/user.entity';
     }),
     AuthModule,
     UsersModule,
+    ListsModule,
   ],
   providers: [
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
     },
+    AdminSeed,
   ],
 })
 export class AppModule { }
