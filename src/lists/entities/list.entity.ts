@@ -1,31 +1,38 @@
 import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
+    Column,
+    CreateDateColumn,
+    Entity,
+    ManyToOne,
+    OneToMany,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn,
 } from 'typeorm';
 import { User } from '@/users/entities/user.entity';
+import { ApiProperty } from '@nestjs/swagger';
 
 @Entity('lists')
 export class List {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+    @ApiProperty()
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
 
-  @Column()
-  title: string;
+    @ApiProperty({ example: 'Todo' })
+    @Column()
+    title: string;
 
-  @Column({ default: 0 })
-  position: number;
+    @ApiProperty({ example: 0 })
+    @Column({ default: 0 })
+    position: number;
 
-  @ManyToOne(() => User, { eager: true })
-  owner: User;
+    @ApiProperty()
+    @ManyToOne(() => User, { eager: true })
+    owner: User;
 
-  @CreateDateColumn()
-  createdAt: Date;
+    @ApiProperty()
+    @CreateDateColumn()
+    createdAt: Date;
 
-  @UpdateDateColumn()
-  updatedAt: Date;
+    @ApiProperty()
+    @UpdateDateColumn()
+    updatedAt: Date;
 }
