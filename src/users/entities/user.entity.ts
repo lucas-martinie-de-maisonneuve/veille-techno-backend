@@ -1,3 +1,5 @@
+import { ApiProperty } from '@nestjs/swagger';
+import { Exclude } from 'class-transformer';
 import {
     Column,
     CreateDateColumn,
@@ -6,44 +8,38 @@ import {
     UpdateDateColumn,
 } from 'typeorm';
 
-import { Exclude } from 'class-transformer';
-
-/**
- * User roles enumeration
- */
 export enum UserRole {
     ADMIN = 'admin',
     USER = 'user',
 }
 
-/**
- * User entity representing a user in the system
- */
 @Entity('users')
 export class User {
+    @ApiProperty()
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
+    @ApiProperty({ example: 'VanLauLam' })
     @Column({ unique: true })
     username: string;
 
+    @ApiProperty({ example: 'vanlaulam@example.com' })
     @Column({ unique: true })
     email: string;
 
-    @Column()
     @Exclude()
+    @Column()
     password: string;
 
-    @Column({
-        type: 'enum',
-        enum: UserRole,
-        default: UserRole.USER,
-    })
+    @ApiProperty({ enum: UserRole, example: UserRole.USER })
+    @Column({ type: 'enum', enum: UserRole, default: UserRole.USER })
     role: UserRole;
 
+    @ApiProperty()
     @CreateDateColumn()
     createdAt: Date;
 
+    @ApiProperty()
     @UpdateDateColumn()
     updatedAt: Date;
 }

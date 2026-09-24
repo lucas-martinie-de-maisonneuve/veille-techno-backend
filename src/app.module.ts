@@ -10,6 +10,8 @@ import { User } from '@/users/entities/user.entity';
 import { AdminSeed } from '@/common/seeds/admin.seed';
 import { ListsModule } from './lists/lists.module';
 import { List } from './lists/entities/list.entity';
+import { CardsModule } from './cards/cards.module';
+import { Card } from './cards/entities/card.entity';
 
 @Module({
   imports: [
@@ -26,10 +28,7 @@ import { List } from './lists/entities/list.entity';
         username: config.get<string>('DB_USERNAME'),
         password: config.get<string>('DB_PASSWORD'),
         database: config.get<string>('DB_NAME'),
-        entities: [
-          User,
-          List,
-        ],
+        entities: [User, List, Card],
         synchronize: true,
       }),
       inject: [ConfigService],
@@ -37,6 +36,7 @@ import { List } from './lists/entities/list.entity';
     AuthModule,
     UsersModule,
     ListsModule,
+    CardsModule,
   ],
   providers: [
     {
@@ -46,4 +46,4 @@ import { List } from './lists/entities/list.entity';
     AdminSeed,
   ],
 })
-export class AppModule { }
+export class AppModule {}

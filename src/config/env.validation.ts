@@ -1,5 +1,11 @@
 import { plainToInstance } from 'class-transformer';
-import { IsNotEmpty, IsNumber, IsOptional, IsString, validateSync } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  validateSync,
+} from 'class-validator';
 
 class EnvironmentVariables {
   @IsString()
@@ -65,7 +71,7 @@ export function validate(config: Record<string, unknown>) {
     throw new Error(
       `${colors.bold}${colors.red}Missing or invalid environment variables:${colors.reset}\n${colors.yellow}${errors
         .map((e) => `  - ${Object.values(e.constraints ?? {}).join(', ')}`)
-        .join('\n')}${colors.reset}`
+        .join('\n')}${colors.reset}`,
     );
   }
 
