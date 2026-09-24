@@ -40,6 +40,10 @@ export class UsersService {
             .getOne();
     }
 
+    async findOneByRole(role: UserRole): Promise<User | null> {
+        return this.userRepository.findOne({ where: { role } });
+    }
+
     async findById(id: string): Promise<User | null> {
         return this.userRepository.findOne({ where: { id } });
     }

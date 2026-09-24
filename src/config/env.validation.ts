@@ -1,5 +1,5 @@
 import { plainToInstance } from 'class-transformer';
-import { IsNotEmpty, IsNumber, IsString, validateSync } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString, validateSync } from 'class-validator';
 
 class EnvironmentVariables {
   @IsString()
@@ -31,6 +31,18 @@ class EnvironmentVariables {
   @IsString()
   @IsNotEmpty()
   PEPPER: string;
+
+  @IsString()
+  @IsOptional()
+  ADMIN_EMAIL?: string;
+
+  @IsString()
+  @IsOptional()
+  ADMIN_PASSWORD?: string;
+
+  @IsString()
+  @IsOptional()
+  ADMIN_USERNAME?: string;
 }
 
 export function validate(config: Record<string, unknown>) {

@@ -1,5 +1,5 @@
 import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBadRequestResponse, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
@@ -19,9 +19,9 @@ export class AuthController {
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: 'Register a new user' })
-  @ApiResponse({ status: 201, description: 'User successfully created' })
+  @ApiCreatedResponse({ description: 'User successfully created' })
   @ApiResponse({ status: 409, description: 'Email or username already in use' })
-  @ApiResponse({ status: 400, description: 'Invalid input' })
+  @ApiBadRequestResponse({ description: 'Invalid input' })
   async register(@Body() dto: RegisterDto) {
     return this.authService.register(dto);
   }
@@ -30,9 +30,9 @@ export class AuthController {
   @Post('login')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Login and get JWT token' })
-  @ApiResponse({ status: 200, description: 'JWT token returned' })
-  @ApiResponse({ status: 401, description: 'Invalid credentials' })
-  @ApiResponse({ status: 400, description: 'Invalid input' })
+  @ApiOkResponse({ description: 'JWT token returned' })
+  @ApiUnauthorizedResponse({ description: 'Invalid credentials' })
+  @ApiBadRequestResponse({ description: 'Invalid input' })
   async login(@Body() dto: LoginDto) {
     return this.authService.login(dto);
   }
