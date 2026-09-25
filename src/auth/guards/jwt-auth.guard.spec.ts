@@ -25,9 +25,9 @@ describe('JwtAuthGuard', () => {
 
     const result = guard.canActivate(mockContext);
     expect(result).toBe(true);
-    expect(mockReflector.getAllAndOverride).toHaveBeenCalledWith(IS_PUBLIC_KEY, [
-      mockContext.getHandler(),
-      mockContext.getClass(),
-    ]);
+    expect(mockReflector.getAllAndOverride).toHaveBeenCalledWith(
+      IS_PUBLIC_KEY,
+      [mockContext.getHandler(), mockContext.getClass()],
+    );
   });
 });

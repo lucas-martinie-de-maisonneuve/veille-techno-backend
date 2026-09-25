@@ -25,9 +25,7 @@ describe('ListsController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [ListsController],
-      providers: [
-        { provide: ListsService, useValue: mockListsService },
-      ],
+      providers: [{ provide: ListsService, useValue: mockListsService }],
     }).compile();
 
     controller = module.get<ListsController>(ListsController);
@@ -38,7 +36,10 @@ describe('ListsController', () => {
     it('should create a list', async () => {
       mockListsService.create.mockResolvedValue(mockList);
       const result = await controller.create({ title: 'Todo' }, mockReq);
-      expect(mockListsService.create).toHaveBeenCalledWith({ title: 'Todo' }, mockUser);
+      expect(mockListsService.create).toHaveBeenCalledWith(
+        { title: 'Todo' },
+        mockUser,
+      );
       expect(result).toEqual(mockList);
     });
   });
@@ -53,9 +54,20 @@ describe('ListsController', () => {
 
   describe('update', () => {
     it('should update a list', async () => {
-      mockListsService.update.mockResolvedValue({ ...mockList, title: 'Updated' });
-      const result = await controller.update('list-1', { title: 'Updated' }, mockReq);
-      expect(mockListsService.update).toHaveBeenCalledWith('list-1', { title: 'Updated' }, mockUser);
+      mockListsService.update.mockResolvedValue({
+        ...mockList,
+        title: 'Updated',
+      });
+      const result = await controller.update(
+        'list-1',
+        { title: 'Updated' },
+        mockReq,
+      );
+      expect(mockListsService.update).toHaveBeenCalledWith(
+        'list-1',
+        { title: 'Updated' },
+        mockUser,
+      );
       expect(result.title).toBe('Updated');
     });
   });

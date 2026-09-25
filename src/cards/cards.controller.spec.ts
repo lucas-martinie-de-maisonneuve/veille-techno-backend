@@ -27,9 +27,7 @@ describe('CardsController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [CardsController],
-      providers: [
-        { provide: CardsService, useValue: mockCardsService },
-      ],
+      providers: [{ provide: CardsService, useValue: mockCardsService }],
     }).compile();
 
     controller = module.get<CardsController>(CardsController);
@@ -43,7 +41,11 @@ describe('CardsController', () => {
 
       const result = await controller.create('list-1', dto, mockReq);
 
-      expect(mockCardsService.create).toHaveBeenCalledWith('list-1', dto, mockUser);
+      expect(mockCardsService.create).toHaveBeenCalledWith(
+        'list-1',
+        dto,
+        mockUser,
+      );
       expect(result).toEqual(mockCard);
     });
   });
@@ -54,7 +56,10 @@ describe('CardsController', () => {
 
       const result = await controller.findAllByList('list-1', mockReq);
 
-      expect(mockCardsService.findAllByList).toHaveBeenCalledWith('list-1', mockUser);
+      expect(mockCardsService.findAllByList).toHaveBeenCalledWith(
+        'list-1',
+        mockUser,
+      );
       expect(result).toEqual([mockCard]);
     });
   });
@@ -72,12 +77,19 @@ describe('CardsController', () => {
 
   describe('update', () => {
     it('should update a card', async () => {
-      mockCardsService.update.mockResolvedValue({ ...mockCard, title: 'Updated' });
+      mockCardsService.update.mockResolvedValue({
+        ...mockCard,
+        title: 'Updated',
+      });
       const dto = { title: 'Updated' };
 
       const result = await controller.update('card-1', dto, mockReq);
 
-      expect(mockCardsService.update).toHaveBeenCalledWith('card-1', dto, mockUser);
+      expect(mockCardsService.update).toHaveBeenCalledWith(
+        'card-1',
+        dto,
+        mockUser,
+      );
       expect(result.title).toBe('Updated');
     });
   });

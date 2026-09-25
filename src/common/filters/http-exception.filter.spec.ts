@@ -36,7 +36,10 @@ describe('HttpExceptionFilter', () => {
   });
 
   it('should include timestamp in response', () => {
-    const exception = new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
+    const exception = new HttpException(
+      'Unauthorized',
+      HttpStatus.UNAUTHORIZED,
+    );
     filter.catch(exception, mockHost as any);
 
     expect(mockJson).toHaveBeenCalledWith(

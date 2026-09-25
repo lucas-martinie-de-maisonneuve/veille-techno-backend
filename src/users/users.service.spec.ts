@@ -1,5 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ConflictException, ForbiddenException, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  ForbiddenException,
+  NotFoundException,
+} from '@nestjs/common';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import { UsersService } from './users.service';
@@ -78,7 +82,9 @@ describe('UsersService', () => {
           email: 'vanlaulam@example.com',
           password: 'password123',
         }),
-      ).rejects.toThrow(new ConflictException(ErrorMessages.auth.EMAIL_OR_USERNAME_TAKEN));
+      ).rejects.toThrow(
+        new ConflictException(ErrorMessages.auth.EMAIL_OR_USERNAME_TAKEN),
+      );
     });
   });
 
@@ -99,9 +105,16 @@ describe('UsersService', () => {
   describe('update', () => {
     it('should update own profile', async () => {
       mockUserRepository.findOne.mockResolvedValue({ ...mockUser });
-      mockUserRepository.save.mockResolvedValue({ ...mockUser, username: 'Updated' });
+      mockUserRepository.save.mockResolvedValue({
+        ...mockUser,
+        username: 'Updated',
+      });
 
-      const result = await service.update('user-1', { username: 'Updated' }, mockOwner);
+      const result = await service.update(
+        'user-1',
+        { username: 'Updated' },
+        mockOwner,
+      );
       expect(result.username).toBe('Updated');
     });
 
@@ -118,7 +131,9 @@ describe('UsersService', () => {
 
       await expect(
         service.update('user-1', { username: 'Updated' }, mockOtherUser),
-      ).rejects.toThrow(new ForbiddenException(ErrorMessages.users.FORBIDDEN_PROFILE));
+      ).rejects.toThrow(
+        new ForbiddenException(ErrorMessages.users.FORBIDDEN_PROFILE),
+      );
     });
 
     it('should throw ForbiddenException if non-admin tries to change role', async () => {
@@ -126,20 +141,32 @@ describe('UsersService', () => {
 
       await expect(
         service.update('user-1', { role: UserRole.ADMIN }, mockOwner),
-      ).rejects.toThrow(new ForbiddenException(ErrorMessages.users.FORBIDDEN_ROLE));
+      ).rejects.toThrow(
+        new ForbiddenException(ErrorMessages.users.FORBIDDEN_ROLE),
+      );
     });
 
     it('should allow admin to change role', async () => {
       mockUserRepository.findOne.mockResolvedValue({ ...mockUser });
-      mockUserRepository.save.mockResolvedValue({ ...mockUser, role: UserRole.ADMIN });
+      mockUserRepository.save.mockResolvedValue({
+        ...mockUser,
+        role: UserRole.ADMIN,
+      });
 
-      const result = await service.update('user-1', { role: UserRole.ADMIN }, mockAdmin);
+      const result = await service.update(
+        'user-1',
+        { role: UserRole.ADMIN },
+        mockAdmin,
+      );
       expect(result.role).toBe(UserRole.ADMIN);
     });
 
     it('should hash password if updated', async () => {
       mockUserRepository.findOne.mockResolvedValue({ ...mockUser });
-      mockUserRepository.save.mockResolvedValue({ ...mockUser, password: 'hashed_password' });
+      mockUserRepository.save.mockResolvedValue({
+        ...mockUser,
+        password: 'hashed_password',
+      });
 
       await service.update('user-1', { password: 'newpassword' }, mockOwner);
       expect(passwordUtil.hashPassword).toHaveBeenCalled();

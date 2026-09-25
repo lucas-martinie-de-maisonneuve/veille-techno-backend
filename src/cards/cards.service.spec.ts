@@ -71,7 +71,10 @@ describe('CardsService', () => {
       const dto = { title: 'Fix login bug' };
       const result = await service.create('list-1', dto, mockOwner);
 
-      expect(mockListsService.findOne).toHaveBeenCalledWith('list-1', mockOwner);
+      expect(mockListsService.findOne).toHaveBeenCalledWith(
+        'list-1',
+        mockOwner,
+      );
       expect(result).toEqual(mockCard);
     });
 
@@ -117,15 +120,17 @@ describe('CardsService', () => {
     it('should throw NotFoundException if card not found', async () => {
       mockCardRepository.findOne.mockResolvedValue(null);
 
-      await expect(service.findOne('unknown', mockOwner))
-        .rejects.toThrow(new NotFoundException(ErrorMessages.cards.NOT_FOUND));
+      await expect(service.findOne('unknown', mockOwner)).rejects.toThrow(
+        new NotFoundException(ErrorMessages.cards.NOT_FOUND),
+      );
     });
 
     it('should throw ForbiddenException if not owner', async () => {
       mockCardRepository.findOne.mockResolvedValue(mockCard);
 
-      await expect(service.findOne('card-1', mockOtherUser))
-        .rejects.toThrow(new ForbiddenException(ErrorMessages.cards.FORBIDDEN));
+      await expect(service.findOne('card-1', mockOtherUser)).rejects.toThrow(
+        new ForbiddenException(ErrorMessages.cards.FORBIDDEN),
+      );
     });
 
     it('should allow admin to access any card', async () => {
@@ -139,9 +144,16 @@ describe('CardsService', () => {
   describe('update', () => {
     it('should update a card', async () => {
       mockCardRepository.findOne.mockResolvedValue({ ...mockCard });
-      mockCardRepository.save.mockResolvedValue({ ...mockCard, title: 'Updated' });
+      mockCardRepository.save.mockResolvedValue({
+        ...mockCard,
+        title: 'Updated',
+      });
 
-      const result = await service.update('card-1', { title: 'Updated' }, mockOwner);
+      const result = await service.update(
+        'card-1',
+        { title: 'Updated' },
+        mockOwner,
+      );
       expect(result.title).toBe('Updated');
     });
 
@@ -149,10 +161,20 @@ describe('CardsService', () => {
       const cardWithList = { ...mockCard, list: { ...mockList, id: 'list-1' } };
       mockCardRepository.findOne.mockResolvedValue(cardWithList);
       mockListsService.findOne.mockResolvedValue({ ...mockList, id: 'list-2' });
-      mockCardRepository.save.mockResolvedValue({ ...cardWithList, list: { id: 'list-2' } });
+      mockCardRepository.save.mockResolvedValue({
+        ...cardWithList,
+        list: { id: 'list-2' },
+      });
 
-      const result = await service.update('card-1', { listId: 'list-2' }, mockOwner);
-      expect(mockListsService.findOne).toHaveBeenCalledWith('list-2', mockOwner);
+      const _result = await service.update(
+        'card-1',
+        { listId: 'list-2' },
+        mockOwner,
+      );
+      expect(mockListsService.findOne).toHaveBeenCalledWith(
+        'list-2',
+        mockOwner,
+      );
     });
   });
 
@@ -175,8 +197,9 @@ describe('CardsService', () => {
     it('should throw ForbiddenException if not owner', async () => {
       mockCardRepository.findOne.mockResolvedValue(mockCard);
 
-      await expect(service.remove('card-1', mockOtherUser))
-        .rejects.toThrow(new ForbiddenException(ErrorMessages.cards.FORBIDDEN));
+      await expect(service.remove('card-1', mockOtherUser)).rejects.toThrow(
+        new ForbiddenException(ErrorMessages.cards.FORBIDDEN),
+      );
     });
   });
 });
