@@ -28,7 +28,6 @@ import { UpdateListDto } from './dto/update-list.dto';
 import type { AuthRequest } from '@/common/types/auth-request.type';
 import { List } from './entities/list.entity';
 
-
 @ApiTags('Lists')
 @ApiBearerAuth()
 @ApiUnauthorizedResponse({ description: 'Unauthorized' })

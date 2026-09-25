@@ -22,9 +22,7 @@ describe('UsersController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UsersController],
-      providers: [
-        { provide: UsersService, useValue: mockUsersService },
-      ],
+      providers: [{ provide: UsersService, useValue: mockUsersService }],
     }).compile();
 
     controller = module.get<UsersController>(UsersController);
@@ -33,11 +31,22 @@ describe('UsersController', () => {
 
   describe('update', () => {
     it('should update user', async () => {
-      mockUsersService.update.mockResolvedValue({ ...mockUser, username: 'Updated' });
+      mockUsersService.update.mockResolvedValue({
+        ...mockUser,
+        username: 'Updated',
+      });
 
-      const result = await controller.update('user-1', { username: 'Updated' }, mockReq);
+      const result = await controller.update(
+        'user-1',
+        { username: 'Updated' },
+        mockReq,
+      );
 
-      expect(mockUsersService.update).toHaveBeenCalledWith('user-1', { username: 'Updated' }, mockReq.user);
+      expect(mockUsersService.update).toHaveBeenCalledWith(
+        'user-1',
+        { username: 'Updated' },
+        mockReq.user,
+      );
       expect(result.username).toBe('Updated');
     });
   });

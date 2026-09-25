@@ -19,7 +19,7 @@ import type { AuthRequest } from '@/common/types/auth-request.type';
 @ApiUnauthorizedResponse({ description: 'Unauthorized' })
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) { }
+  constructor(private readonly usersService: UsersService) {}
 
   /**
    * Update user information and role.

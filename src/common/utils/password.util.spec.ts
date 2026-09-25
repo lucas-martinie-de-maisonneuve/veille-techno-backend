@@ -23,13 +23,21 @@ describe('PasswordUtil', () => {
   describe('comparePassword', () => {
     it('should return true for correct password', async () => {
       const hash = await hashPassword('password123', mockConfigService);
-      const result = await comparePassword('password123', hash, mockConfigService);
+      const result = await comparePassword(
+        'password123',
+        hash,
+        mockConfigService,
+      );
       expect(result).toBe(true);
     });
 
     it('should return false for wrong password', async () => {
       const hash = await hashPassword('password123', mockConfigService);
-      const result = await comparePassword('wrongpassword', hash, mockConfigService);
+      const result = await comparePassword(
+        'wrongpassword',
+        hash,
+        mockConfigService,
+      );
       expect(result).toBe(false);
     });
   });

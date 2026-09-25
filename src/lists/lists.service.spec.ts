@@ -91,14 +91,16 @@ describe('ListsService', () => {
 
     it('should throw NotFoundException if list not found', async () => {
       mockListRepository.findOne.mockResolvedValue(null);
-      await expect(service.findOne('unknown', mockOwner))
-        .rejects.toThrow(new NotFoundException(ErrorMessages.lists.NOT_FOUND));
+      await expect(service.findOne('unknown', mockOwner)).rejects.toThrow(
+        new NotFoundException(ErrorMessages.lists.NOT_FOUND),
+      );
     });
 
     it('should throw ForbiddenException if not owner', async () => {
       mockListRepository.findOne.mockResolvedValue(mockList);
-      await expect(service.findOne('list-1', mockOtherUser))
-        .rejects.toThrow(new ForbiddenException(ErrorMessages.lists.FORBIDDEN));
+      await expect(service.findOne('list-1', mockOtherUser)).rejects.toThrow(
+        new ForbiddenException(ErrorMessages.lists.FORBIDDEN),
+      );
     });
 
     it('should allow admin to access any list', async () => {
@@ -119,34 +121,47 @@ describe('ListsService', () => {
 
     it('should throw ForbiddenException if not owner', async () => {
       mockListRepository.findOne.mockResolvedValue(mockList);
-      await expect(service.remove('list-1', mockOtherUser))
-        .rejects.toThrow(new ForbiddenException(ErrorMessages.lists.FORBIDDEN));
+      await expect(service.remove('list-1', mockOtherUser)).rejects.toThrow(
+        new ForbiddenException(ErrorMessages.lists.FORBIDDEN),
+      );
     });
 
     it('should throw NotFoundException if list not found', async () => {
       mockListRepository.findOne.mockResolvedValue(null);
-      await expect(service.remove('unknown', mockOwner))
-        .rejects.toThrow(new NotFoundException(ErrorMessages.lists.NOT_FOUND));
+      await expect(service.remove('unknown', mockOwner)).rejects.toThrow(
+        new NotFoundException(ErrorMessages.lists.NOT_FOUND),
+      );
     });
   });
 
   describe('update', () => {
     it('should update a list', async () => {
       mockListRepository.findOne.mockResolvedValue({ ...mockList });
-      mockListRepository.save.mockResolvedValue({ ...mockList, title: 'Updated' });
+      mockListRepository.save.mockResolvedValue({
+        ...mockList,
+        title: 'Updated',
+      });
 
-      const result = await service.update('list-1', { title: 'Updated' }, mockOwner);
+      const result = await service.update(
+        'list-1',
+        { title: 'Updated' },
+        mockOwner,
+      );
       expect(result.title).toBe('Updated');
     });
 
     it('should throw ForbiddenException if not owner', async () => {
       mockListRepository.findOne.mockResolvedValue(mockList);
-      await expect(service.update('list-1', { title: 'Updated' }, mockOtherUser))
-        .rejects.toThrow(new ForbiddenException(ErrorMessages.lists.FORBIDDEN));
+      await expect(
+        service.update('list-1', { title: 'Updated' }, mockOtherUser),
+      ).rejects.toThrow(new ForbiddenException(ErrorMessages.lists.FORBIDDEN));
     });
 
     it('should reorder lists when position changes', async () => {
-      mockListRepository.findOne.mockResolvedValue({ ...mockList, position: 2 });
+      mockListRepository.findOne.mockResolvedValue({
+        ...mockList,
+        position: 2,
+      });
       mockListRepository.find.mockResolvedValue([
         { id: 'list-2', position: 0 },
         { id: 'list-3', position: 1 },

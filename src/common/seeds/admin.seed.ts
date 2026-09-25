@@ -11,7 +11,7 @@ export class AdminSeed implements OnApplicationBootstrap {
   constructor(
     private readonly usersService: UsersService,
     private readonly configService: ConfigService,
-  ) { }
+  ) {}
 
   async onApplicationBootstrap() {
     if (process.env.NODE_ENV === 'test') return;
@@ -30,13 +30,13 @@ export class AdminSeed implements OnApplicationBootstrap {
     if (!email || !password || !username) {
       this.logger.error(
         '\n' +
-        '═══════════════════════════════════════════════════════════\n' +
-        'WARNING: No admin account found in the database! This may cause issues with admin-restricted routes.\n' +
-        'To create an admin account, add the following variables to your .env file:\n' +
-        'ADMIN_EMAIL=admin@example.com / ADMIN_PASSWORD=yourpassword / ADMIN_USERNAME=admin\n' +
-        'Once the admin account is created, these variables can be removed from your .env file.\n\n' +
-        'Restart the application after adding the variables.\n' +
-        '═══════════════════════════════════════════════════════════\n',
+          '═══════════════════════════════════════════════════════════\n' +
+          'WARNING: No admin account found in the database! This may cause issues with admin-restricted routes.\n' +
+          'To create an admin account, add the following variables to your .env file:\n' +
+          'ADMIN_EMAIL=admin@example.com / ADMIN_PASSWORD=yourpassword / ADMIN_USERNAME=admin\n' +
+          'Once the admin account is created, these variables can be removed from your .env file.\n\n' +
+          'Restart the application after adding the variables.\n' +
+          '═══════════════════════════════════════════════════════════\n',
       );
       return;
     }

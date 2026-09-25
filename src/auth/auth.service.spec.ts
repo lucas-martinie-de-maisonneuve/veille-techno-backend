@@ -57,7 +57,9 @@ describe('AuthService', () => {
 
   describe('register', () => {
     it('should hash password and create user', async () => {
-      (passwordUtil.hashPassword as jest.Mock).mockResolvedValue('hashed_password');
+      (passwordUtil.hashPassword as jest.Mock).mockResolvedValue(
+        'hashed_password',
+      );
       mockUsersService.create.mockResolvedValue(mockUser);
 
       const dto = {
@@ -68,7 +70,10 @@ describe('AuthService', () => {
 
       const result = await service.register(dto);
 
-      expect(passwordUtil.hashPassword).toHaveBeenCalledWith('password123', mockConfigService);
+      expect(passwordUtil.hashPassword).toHaveBeenCalledWith(
+        'password123',
+        mockConfigService,
+      );
       expect(mockUsersService.create).toHaveBeenCalledWith({
         username: dto.username,
         email: dto.email,
@@ -99,7 +104,9 @@ describe('AuthService', () => {
 
       await expect(
         service.login({ email: 'unknown@test.com', password: 'password123' }),
-      ).rejects.toThrow(new UnauthorizedException(ErrorMessages.auth.INVALID_CREDENTIALS));
+      ).rejects.toThrow(
+        new UnauthorizedException(ErrorMessages.auth.INVALID_CREDENTIALS),
+      );
     });
 
     it('should throw UnauthorizedException if password is wrong', async () => {
@@ -107,8 +114,13 @@ describe('AuthService', () => {
       (passwordUtil.comparePassword as jest.Mock).mockResolvedValue(false);
 
       await expect(
-        service.login({ email: 'vanlaulam@example.com', password: 'wrongpassword' }),
-      ).rejects.toThrow(new UnauthorizedException(ErrorMessages.auth.INVALID_CREDENTIALS));
+        service.login({
+          email: 'vanlaulam@example.com',
+          password: 'wrongpassword',
+        }),
+      ).rejects.toThrow(
+        new UnauthorizedException(ErrorMessages.auth.INVALID_CREDENTIALS),
+      );
     });
   });
 });

@@ -19,5 +19,19 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  kanban-db-test:
+    image: postgres:16-alpine
+    profiles:
+      - test
+    ports:
+      - '5433:5432'
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: kanban_board_test
+    volumes:
+      - postgres_data_test:/var/lib/postgresql/data
+
 volumes:
   postgres_data:
+  postgres_data_test:
