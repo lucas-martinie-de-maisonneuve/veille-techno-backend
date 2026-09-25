@@ -71,13 +71,22 @@ jobs:
           name: coverage-report
           path: coverage/
 
-      - name: Comment PR with coverage
+      - name: Comment PR with full coverage summary
         uses: romeovs/lcov-reporter-action@v0.4.0
         with:
           lcov-file: ./coverage/lcov.info
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          title: '📊 Code Coverage Report'
+          title: '📊 Global Coverage Report'
           delete-old-comments: true
+          filter-changed-files: false
+
+      - name: Comment PR with changed files coverage
+        uses: romeovs/lcov-reporter-action@v0.4.0
+        with:
+          lcov-file: ./coverage/lcov.info
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          title: '🔍 Changed Files Coverage'
+          delete-old-comments: false
           filter-changed-files: true
 
   e2e-tests:
