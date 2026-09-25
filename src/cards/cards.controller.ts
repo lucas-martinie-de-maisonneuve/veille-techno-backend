@@ -22,14 +22,11 @@ import {
   ApiUnauthorizedResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { Request as ExpressRequest } from 'express';
 import { CardsService } from './cards.service';
 import { CreateCardDto } from './dto/create-card.dto';
 import { UpdateCardDto } from './dto/update-card.dto';
-import { UserRole } from '@/users/entities/user.entity';
 import { Card } from './entities/card.entity';
-
-type AuthRequest = ExpressRequest & { user: { id: string; role: UserRole } };
+import type { AuthRequest } from '@/common/types/auth-request.type';
 
 @ApiTags('Cards')
 @ApiBearerAuth()
