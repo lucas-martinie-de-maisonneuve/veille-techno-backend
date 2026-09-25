@@ -12,14 +12,14 @@ import {
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserRole } from './entities/user.entity';
-import { Request as ExpressRequest } from 'express';
+import type { AuthRequest } from '@/common/types/auth-request.type';
 
 @ApiTags('Users')
 @ApiBearerAuth()
 @ApiUnauthorizedResponse({ description: 'Unauthorized' })
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) { }
 
   /**
    * Update user information and role.
@@ -39,7 +39,7 @@ export class UsersController {
   async update(
     @Param('id') id: string,
     @Body() dto: UpdateUserDto,
-    @Request() req: ExpressRequest & { user: { id: string; role: UserRole } },
+    @Request() req: AuthRequest & { user: { id: string; role: UserRole } },
   ) {
     return this.usersService.update(id, dto, req.user);
   }
