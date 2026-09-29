@@ -15,6 +15,7 @@ async function bootstrap() {
     .setTitle("Lucas's API Documentation")
     .setDescription('The kanban API description')
     .setVersion('1.0')
+    .addServer('http://localhost:3000/api')
     .addServer('http://localhost:3001/api')
     .addBearerAuth()
     .build();
