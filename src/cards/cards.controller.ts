@@ -19,6 +19,7 @@ import {
   ApiBadRequestResponse,
   ApiForbiddenResponse,
   ApiNotFoundResponse,
+  ApiTooManyRequestsResponse,
   ApiUnauthorizedResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -41,6 +42,7 @@ export class CardsController {
   @ApiBadRequestResponse({ description: 'Invalid input' })
   @ApiForbiddenResponse({ description: 'Forbidden' })
   @ApiNotFoundResponse({ description: 'List not found' })
+  @ApiTooManyRequestsResponse({ description: 'Too many requests' })
   async create(
     @Param('listId') listId: string,
     @Body() dto: CreateCardDto,
@@ -54,6 +56,7 @@ export class CardsController {
   @ApiOkResponse({ description: 'List of cards', type: Card })
   @ApiForbiddenResponse({ description: 'Forbidden' })
   @ApiNotFoundResponse({ description: 'List not found' })
+  @ApiTooManyRequestsResponse({ description: 'Too many requests' })
   async findAllByList(
     @Param('listId') listId: string,
     @Request() req: AuthRequest,
@@ -66,6 +69,7 @@ export class CardsController {
   @ApiOkResponse({ description: 'Card found', type: Card })
   @ApiForbiddenResponse({ description: 'Forbidden' })
   @ApiNotFoundResponse({ description: 'Card not found' })
+  @ApiTooManyRequestsResponse({ description: 'Too many requests' })
   async findOne(@Param('id') id: string, @Request() req: AuthRequest) {
     return this.cardsService.findOne(id, req.user);
   }
@@ -76,6 +80,7 @@ export class CardsController {
   @ApiBadRequestResponse({ description: 'Invalid input' })
   @ApiForbiddenResponse({ description: 'Forbidden' })
   @ApiNotFoundResponse({ description: 'Card not found' })
+  @ApiTooManyRequestsResponse({ description: 'Too many requests' })
   async update(
     @Param('id') id: string,
     @Body() dto: UpdateCardDto,
@@ -90,6 +95,7 @@ export class CardsController {
   @ApiNoContentResponse({ description: 'Card deleted' })
   @ApiForbiddenResponse({ description: 'Forbidden' })
   @ApiNotFoundResponse({ description: 'Card not found' })
+  @ApiTooManyRequestsResponse({ description: 'Too many requests' })
   async remove(@Param('id') id: string, @Request() req: AuthRequest) {
     return this.cardsService.remove(id, req.user);
   }

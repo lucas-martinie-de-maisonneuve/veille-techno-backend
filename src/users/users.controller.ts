@@ -16,6 +16,7 @@ import {
   ApiBadRequestResponse,
   ApiForbiddenResponse,
   ApiNotFoundResponse,
+  ApiTooManyRequestsResponse,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { UsersService } from './users.service';
@@ -45,6 +46,7 @@ export class UsersController {
   @ApiOkResponse({ description: 'User updated' })
   @ApiBadRequestResponse({ description: 'Invalid input' })
   @ApiForbiddenResponse({ description: 'Forbidden' })
+  @ApiTooManyRequestsResponse({ description: 'Too many requests' })
   @ApiNotFoundResponse({ description: 'User not found' })
   async update(
     @Param('id') id: string,
@@ -62,6 +64,7 @@ export class UsersController {
   @Get('me')
   @ApiOperation({ summary: 'Get current user profile' })
   @ApiOkResponse({ description: 'Current user profile', type: User })
+  @ApiTooManyRequestsResponse({ description: 'Too many requests' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   async me(@Request() req: AuthRequest) {
     return this.usersService.findById(req.user.id);
@@ -72,6 +75,7 @@ export class UsersController {
   @ApiOkResponse({ description: 'User found', type: User })
   @ApiForbiddenResponse({ description: 'Forbidden' })
   @ApiNotFoundResponse({ description: 'User not found' })
+  @ApiTooManyRequestsResponse({ description: 'Too many requests' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   async findOne(@Param('id') id: string, @Request() req: AuthRequest) {
     if (req.user.role !== UserRole.ADMIN && req.user.id !== id) {

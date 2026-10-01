@@ -6,8 +6,10 @@ import {
   ApiOperation,
   ApiResponse,
   ApiTags,
+  ApiTooManyRequestsResponse,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
+import { Throttle } from '@nestjs/throttler';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
@@ -24,23 +26,27 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Public()
+  @Throttle({ default: { ttl: 60000, limit: 5 } })
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: 'Register a new user' })
   @ApiCreatedResponse({ description: 'User successfully created' })
   @ApiResponse({ status: 409, description: 'Email or username already in use' })
+  @ApiTooManyRequestsResponse({ description: 'Too many requests' })
   @ApiBadRequestResponse({ description: 'Invalid input' })
   async register(@Body() dto: RegisterDto) {
     return this.authService.register(dto);
   }
 
   @Public()
+  @Throttle({ default: { ttl: 60000, limit: 3 } })
   @Post('login')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Login and get JWT token' })
   @ApiOkResponse({ description: 'JWT token returned' })
   @ApiUnauthorizedResponse({ description: 'Invalid credentials' })
   @ApiBadRequestResponse({ description: 'Invalid input' })
+  @ApiTooManyRequestsResponse({ description: 'Too many requests' })
   async login(@Body() dto: LoginDto) {
     return this.authService.login(dto);
   }
