@@ -13,6 +13,7 @@ import { ListsModule } from './lists/lists.module';
 import { List } from './lists/entities/list.entity';
 import { CardsModule } from './cards/cards.module';
 import { Card } from './cards/entities/card.entity';
+import { HealthModule } from './health/health.module';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { Card } from './cards/entities/card.entity';
     UsersModule,
     ListsModule,
     CardsModule,
+    HealthModule,
   ],
   providers: [
     {
