@@ -4,8 +4,8 @@ import { HealthController } from './health.controller';
 import { HealthApiKeyGuard } from './health-api-key.guard';
 
 @Module({
-    imports: [TerminusModule],
-    controllers: [HealthController],
-    providers: [HealthApiKeyGuard],
+  imports: [TerminusModule],
+  controllers: [HealthController],
+  providers: [HealthApiKeyGuard],
 })
-export class HealthModule { }
+export class HealthModule {}

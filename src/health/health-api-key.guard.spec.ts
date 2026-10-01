@@ -37,12 +37,14 @@ describe('HealthApiKeyGuard', () => {
   });
 
   it('should throw UnauthorizedException with invalid API key', () => {
-    expect(() => guard.canActivate(mockExecutionContext('wrong-key')))
-      .toThrow(UnauthorizedException);
+    expect(() => guard.canActivate(mockExecutionContext('wrong-key'))).toThrow(
+      UnauthorizedException,
+    );
   });
 
   it('should throw UnauthorizedException with no API key', () => {
-    expect(() => guard.canActivate(mockExecutionContext()))
-      .toThrow(UnauthorizedException);
+    expect(() => guard.canActivate(mockExecutionContext())).toThrow(
+      UnauthorizedException,
+    );
   });
 });
