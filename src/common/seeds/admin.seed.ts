@@ -14,7 +14,7 @@ export class AdminSeed implements OnApplicationBootstrap {
   ) {}
 
   async onApplicationBootstrap() {
-    if (process.env.NODE_ENV === 'test') return;
+    if (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'production') return;
 
     const existingAdmin = await this.usersService.findOneByRole(UserRole.ADMIN);
 
