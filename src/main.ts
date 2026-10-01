@@ -18,6 +18,14 @@ async function bootstrap() {
     .addServer('http://localhost:3000/api')
     .addServer('http://localhost:3001/api')
     .addBearerAuth()
+    .addApiKey(
+      {
+        type: 'apiKey',
+        in: 'header',
+        name: 'x-api-key',
+      },
+      'x-api-key',
+    )
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
