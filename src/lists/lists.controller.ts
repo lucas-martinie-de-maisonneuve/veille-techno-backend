@@ -18,6 +18,7 @@ import {
   ApiOkResponse,
   ApiOperation,
   ApiBadRequestResponse,
+  ApiTooManyRequestsResponse,
   ApiForbiddenResponse,
   ApiUnauthorizedResponse,
   ApiTags,
@@ -39,6 +40,7 @@ export class ListsController {
   @ApiOperation({ summary: 'Create a new list' })
   @ApiCreatedResponse({ description: 'List created', type: List })
   @ApiBadRequestResponse({ description: 'Invalid input' })
+  @ApiTooManyRequestsResponse({ description: 'Too many requests' })
   async create(@Body() dto: CreateListDto, @Request() req: AuthRequest) {
     return this.listsService.create(dto, req.user as any);
   }
@@ -46,6 +48,7 @@ export class ListsController {
   @Get()
   @ApiOperation({ summary: 'Get all my lists' })
   @ApiOkResponse({ description: 'List of lists', type: List })
+  @ApiTooManyRequestsResponse({ description: 'Too many requests' })
   async findAll(@Request() req: AuthRequest) {
     return this.listsService.findAll(req.user as any);
   }
@@ -55,6 +58,7 @@ export class ListsController {
   @ApiOkResponse({ description: 'List updated', type: List })
   @ApiBadRequestResponse({ description: 'Invalid input' })
   @ApiForbiddenResponse({ description: 'Forbidden' })
+  @ApiTooManyRequestsResponse({ description: 'Too many requests' })
   @ApiNotFoundResponse({ description: 'List not found' })
   async update(
     @Param('id') id: string,
@@ -69,6 +73,7 @@ export class ListsController {
   @ApiOperation({ summary: 'Delete a list' })
   @ApiNoContentResponse({ description: 'List deleted' })
   @ApiForbiddenResponse({ description: 'Forbidden' })
+  @ApiTooManyRequestsResponse({ description: 'Too many requests' })
   @ApiNotFoundResponse({ description: 'List not found' })
   async remove(@Param('id') id: string, @Request() req: AuthRequest) {
     return this.listsService.remove(id, req.user);
