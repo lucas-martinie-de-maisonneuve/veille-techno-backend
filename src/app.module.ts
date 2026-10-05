@@ -25,6 +25,9 @@ import { HealthModule } from './health/health.module';
       {
         ttl: 60000,
         limit: 20,
+        getTracker: (req) => {
+          return req.headers['x-forwarded-for']?.split(',')[0] ?? req.ip;
+        },
       },
     ]),
     TypeOrmModule.forRootAsync({

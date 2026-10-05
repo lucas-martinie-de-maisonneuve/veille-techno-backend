@@ -85,4 +85,17 @@ export class UsersController {
     if (!user) throw new NotFoundException(ErrorMessages.users.NOT_FOUND);
     return user;
   }
+
+  @Get()
+  @ApiOperation({ summary: 'Get all users (admin only)' })
+  @ApiOkResponse({ description: 'List of all users', type: [User] })
+  @ApiForbiddenResponse({ description: 'Forbidden' })
+  @ApiTooManyRequestsResponse({ description: 'Too many requests' })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  async findAll(@Request() req: AuthRequest) {
+    if (req.user.role !== UserRole.ADMIN) {
+      throw new ForbiddenException(ErrorMessages.users.FORBIDDEN_PROFILE);
+    }
+    return this.usersService.findAll();
+  }
 }

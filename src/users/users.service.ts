@@ -74,4 +74,10 @@ export class UsersService {
     Object.assign(user, dto);
     return this.userRepository.save(user);
   }
+
+  async findAll(): Promise<User[]> {
+    return this.userRepository.find({
+      order: { createdAt: 'DESC' },
+    });
+  }
 }
